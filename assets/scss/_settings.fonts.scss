@@ -1,0 +1,52 @@
+// Include fonts
+@font-face {
+    font-family: 'WorkSans-Regular';
+    src: url('/../../fonts/WorkSans-Regular.ttf') format('ttf')
+}
+
+@font-face {
+    font-family: 'WorkSans-Bold';
+    src: url('/../../fonts/WorkSans-Bold.ttf') format('ttf')
+}
+
+@font-face {
+    font-family: 'WorkSans-Semibold';
+    src: url('/../../fonts/WorkSans-Semibold.ttf') format('ttf')
+}
+
+@font-face {
+    font-family: 'WorkSans-Light';
+    src: url('/../../fonts/WorkSans-Light.ttf') format('ttf')
+}
+
+@font-face {
+    font-family: 'WorkSans-Italic';
+    src: url('/../../fonts/WorkSans-Italic.ttf') format('ttf')
+}
+
+@font-face {
+    font-family: 'Pangolin';
+    src: url('/../../fonts/Pangolin-Regular.ttf') format('ttf')
+}
+
+// Define font family variables
+$fontRegular: 'WorkSans-Regular',
+sans-serif;
+$fontSemibold: 'WorkSans-Semibold',
+sans-serif;
+$fontBold: 'WorkSans-Bold',
+sans-serif;
+$fontLight: 'WorkSans-Light',
+sans-serif;
+$fontItalic: 'WorkSans-Italic',
+sans-serif;
+$fontPangolinRegular: 'Pangolin',
+cursive;
+// Define font sizes
+$fontSizeSmall: 1.2rem;
+$fontSizeRegular: 1.4rem;
+$fontSizeMedium: 1.6rem;
+$fontSizeTitle: 2rem;
+$fontSizeBig: 2.5rem;
+$fontSizeHeading: 3rem;
+$fontSizeHuge: 5rem;

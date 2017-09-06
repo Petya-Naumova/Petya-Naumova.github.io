@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css?family=Pangolin:100,200,300,400,500,600,700,800,900');
+//Settings - variables, configs
+@import 'settings.colors';
+@import 'settings.globals';
+@import 'settings.fonts';
+@import 'settings.grid';
+@import 'settings.message-formatting';
+//Mixins, helpers
+//Resets, globals
+@import 'generic.reset';
+@import 'generic.box-sizing';
+// HTML unclassed elements
+@import 'base.app-root';
+@import 'base.page';
+@import 'base.inputs';
+@import 'base.buttons';
+// Agnostically named classes with no cosmetics
+@import 'objects.form-wrapper';
+@import 'objects.footer';
+// Reusable designed pieces of UI
+@import 'components.headings';
+@import 'components.buttons';
+@import 'components.list-data';
+//Overrides, helpers, utilities
+@import 'tools.grid';
+@import 'tools.graphics';
+//Page specific styles
+@import 'src/app/app.component';
+@import 'src/app/header/header.component';
+@import 'src/app/recipes/recipes.component';
+@import 'src/app/recipes/recipe-detail/recipe-detail.component';
+@import 'src/app/recipes/recipe-list/recipe-list.component';
+@import 'src/app/recipes/recipe-list/recipe-item/recipe-item.component';
+@import 'src/app/ingredients/ingredients.component';
+@import 'src/app/ingredients/edit/edit.component';
+@import 'src/app/footer/footer.component';

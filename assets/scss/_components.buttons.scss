@@ -1,0 +1,70 @@
+            .c-button {
+                background: none;
+                border: none;
+                border-radius: $button-border-radius;
+                color: $secondaryTextColor;
+                cursor: pointer;
+                display: inline-block;
+                font-family: $fontPangolinRegular;
+                font-size: 1.7rem;
+                letter-spacing: .05em;
+                font-weight: 600;
+                height: $button-height;
+                line-height: $button-height;
+                min-width: 15rem;
+                padding: 0 $button-side-padding-without-border;
+                position: relative;
+                text-align: center;
+                text-decoration: none;
+                overflow: hidden;
+                transform: translate3d(0, 0, 0);
+                &:after {
+                    content: '';
+                    background: linear-gradient(to right, $primaryButtonGradientStartColor 50%, $primaryButtonGradientEndColor 100%);
+                    height: $button-height;
+                    display: inline-block;
+                    left: 0;
+                    position: absolute;
+                    top: 0;
+                    transform: translateX(-50%);
+                    transition: transform .4s ease;
+                    width: 200%;
+                    z-index: -1;
+                }
+                &:not([disabled]):hover:after,
+                &:not([disabled]):focus:after {
+                    transform: translateX(0);
+                }
+                @media only screen and (min-width: 320px) and (max-width: 768px){
+                   min-width: 18rem;
+                }
+                &--add {
+                    @extend .c-button;
+                    margin-right: 1rem;
+                    &:after {
+                        background: linear-gradient(to right, $addButtonGradientStartColor 50%, $addButtonGradientEndColor 100%);
+                    }
+                }
+                &--delete {
+                    @extend .c-button;
+                    margin-right: 1rem;
+                    &:after {
+                        background: linear-gradient(to right, $deleteButtonGradientStartColor 50%, $deleteButtonGradientEndColor 100%);
+                    }
+                }
+                &--clear {
+                    @extend .c-button;
+                    &:after {
+                        background: linear-gradient(to right, $clearButtonGradientStartColor 50%, $clearButtonGradientEndColor 100%);
+                    }
+                }
+                &[disabled] {
+                    background-color: $secondaryOddRowBackgroundColor;
+                    border: 1px solid $disableBorderColor;
+                    color: $buttonDisableTextColor;
+                    cursor: default;
+                    &:after {
+                        content: none;
+                    }
+                }
+            }
