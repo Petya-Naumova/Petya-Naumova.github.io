@@ -3,7 +3,7 @@ webpackJsonp(["ingredients.module"],{
 /***/ "../../../../../src/app/ingredients/edit/edit.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"o-form-wrapper c-list-data__row row row--no-margin\">\n    <div class=\"col-xs-12 col-sm-12\">\n        <form (ngSubmit)=\"onAddItem(form)\" #form=\"ngForm\">\n            <div class=\"row row--no-margin first-xs\">\n                <div class=\"col-xs-5 col-sm-8\">\n                    <label for=\"name\">Name</label>\n                    <input type=\"text\" name=\"name\" ngModel>\n                </div>\n                <div class=\"col-xs-2 col-sm-4\">\n                    <label for=\"amount\">Amount</label>\n                    <input type=\"number\" name=\"amount\" ngModel>\n                </div>\n            </div>\n            <div class=\"row first-xs buttons-container\">\n                <div class=\"col-xs-12\" style=\"margin-left: 2rem;\">\n                    <button class=\"c-button--add\" type=\"submit\">Add</button>\n                    <button class=\"c-button--delete\" type=\"button\">Delete</button>\n                    <button class=\"c-button--clear\" type=\"button\">Clear</button>\n                </div>\n            </div>\n        </form>\n    </div>\n</div>\n"
+module.exports = "<div class=\"o-form-wrapper c-list-data__row row row--no-margin\">\n    <div class=\"col-xs-12 col-sm-12\">\n        <form (ngSubmit)=\"onSubmitItem(form)\" #form=\"ngForm\">\n            <div class=\"row row--no-margin first-xs\">\n                <div class=\"col-xs-5 col-sm-8\">\n                    <label for=\"name\">Name</label>\n                    <input \n                        type=\"text\" \n                        id=\"name\" \n                        name=\"name\" \n                        ngModel \n                        required>\n                </div>\n                <div class=\"col-xs-2 col-sm-4\">\n                    <label for=\"amount\">Amount</label>\n                    <input \n                        type=\"number\" \n                        id=\"amount\" \n                        name=\"amount\" \n                        ngModel \n                        required \n                        pattern=\"^[1-9]+[0+9]*$\">\n                </div>\n            </div>\n            <div class=\"row first-xs buttons-container\">\n                <div class=\"col-xs-12\" style=\"margin-left: 2rem;\">\n                    <button \n                        class=\"c-button--add\" \n                        type=\"submit\" \n                        [disabled]=\"!form.valid\">\n                        {{ editMode ? 'Update' : 'Add'}}\n                    </button>\n                    <button \n                        class=\"c-button--delete\" \n                        type=\"button\"\n                        (click)=\"onDelete()\"\n                        *ngIf=\"editMode\">Delete</button>\n                    <button \n                        class=\"c-button--clear\" \n                        type=\"button\"\n                        (click)=\"onClear()\">\n                        Clear\n                    </button>\n                </div>\n            </div>\n        </form>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -13,8 +13,9 @@ module.exports = "<div class=\"o-form-wrapper c-list-data__row row row--no-margi
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EditComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_models__ = __webpack_require__("../../../../../src/app/shared/models/index.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ingredients_service__ = __webpack_require__("../../../../../src/app/ingredients/ingredients.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_models__ = __webpack_require__("../../../../../src/app/shared/models/index.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ingredients_service__ = __webpack_require__("../../../../../src/app/ingredients/ingredients.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -27,27 +28,63 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var EditComponent = (function () {
     function EditComponent(ingrService) {
         this.ingrService = ingrService;
+        this.editMode = false;
     }
-    EditComponent.prototype.ngOnInit = function () { };
-    EditComponent.prototype.onAddItem = function (form) {
+    EditComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subscription = this.ingrService.startedEditing
+            .subscribe(function (index) {
+            _this.editedItemIndex = index;
+            _this.editMode = true;
+            _this.editedItem = _this.ingrService.getIngredient(index);
+            _this.ingredientsForm.setValue({
+                name: _this.editedItem.name,
+                amount: _this.editedItem.amount
+            });
+        });
+    };
+    EditComponent.prototype.onSubmitItem = function (form) {
         var value = form.value;
-        var newIngredient = new __WEBPACK_IMPORTED_MODULE_1__shared_models__["a" /* Ingredient */](value.name, value.amount);
-        this.ingrService.addIngredient(newIngredient);
+        var newIngredient = new __WEBPACK_IMPORTED_MODULE_2__shared_models__["a" /* Ingredient */](value.name, value.amount);
+        if (this.editMode) {
+            this.ingrService.updateIngredient(this.editedItemIndex, newIngredient);
+        }
+        else {
+            this.ingrService.addIngredient(newIngredient);
+        }
+        this.editMode = false;
+        form.reset();
+    };
+    EditComponent.prototype.onClear = function () {
+        this.ingredientsForm.reset();
+        this.editMode = false;
+    };
+    EditComponent.prototype.onDelete = function () {
+        this.ingrService.deleteIngredient(this.editedItemIndex);
+        this.onClear();
+    };
+    EditComponent.prototype.ngOnDestroy = function () {
+        this.subscription.unsubscribe();
     };
     return EditComponent;
 }());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('form'),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_forms__["e" /* NgForm */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_forms__["e" /* NgForm */]) === "function" && _a || Object)
+], EditComponent.prototype, "ingredientsForm", void 0);
 EditComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'app-edit',
         template: __webpack_require__("../../../../../src/app/ingredients/edit/edit.component.html")
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__ingredients_service__["a" /* IngredientsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ingredients_service__["a" /* IngredientsService */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__ingredients_service__["a" /* IngredientsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ingredients_service__["a" /* IngredientsService */]) === "function" && _b || Object])
 ], EditComponent);
 
-var _a;
+var _a, _b;
 //# sourceMappingURL=edit.component.js.map
 
 /***/ }),
@@ -98,7 +135,7 @@ IngredientsRoutingModule = __decorate([
 /***/ "../../../../../src/app/ingredients/ingredients.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"c-list-data__row row row--no-margin center-xs app-r\">\n    <div class=\"col-xs-12\">\n        <app-edit></app-edit>\n        <div class=\"row\">\n            <div class=\"col-xs-12 col-sm-12\">\n                <ul class=\"list-group\">\n                    <li>\n                        <a class=\"list-group-item\" *ngFor=\"let ingredient of ingredients\">\n                        {{ ingredient.name }} ({{ ingredient.amount }})</a>\n                    </li>\n                </ul>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<div class=\"c-list-data__row row row--no-margin center-xs app-r\">\n    <div class=\"col-xs-12\">\n        <app-edit></app-edit>\n        <div class=\"row\">\n            <div class=\"col-xs-12 col-sm-12\">\n                <ul class=\"list-group\">\n                    <li>\n                        <a class=\"list-group-item\" \n                           *ngFor=\"let ingredient of ingredients; let i = index\"\n                           (click)=\"onEditItem(i)\">\n                        {{ ingredient.name }} ({{ ingredient.amount }})</a>\n                    </li>\n                </ul>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -131,6 +168,9 @@ var IngredientsComponent = (function () {
             .subscribe(function (ingredients) {
             _this.ingredients = ingredients;
         });
+    };
+    IngredientsComponent.prototype.onEditItem = function (index) {
+        this.ingrService.startedEditing.next(index);
     };
     IngredientsComponent.prototype.ngOnDestroy = function () {
         this.subscription.unsubscribe();
@@ -186,7 +226,7 @@ IngredientsModule = __decorate([
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__ingredients_routing_module__["a" /* IngredientsRoutingModule */],
             __WEBPACK_IMPORTED_MODULE_5__angular_common__["b" /* CommonModule */],
-            __WEBPACK_IMPORTED_MODULE_6__angular_forms__["b" /* FormsModule */],
+            __WEBPACK_IMPORTED_MODULE_6__angular_forms__["d" /* FormsModule */],
             __WEBPACK_IMPORTED_MODULE_2__shared_shared_module__["a" /* SharedModule */]
         ],
         declarations: [

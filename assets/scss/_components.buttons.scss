@@ -51,6 +51,14 @@
                     &:after {
                         background: linear-gradient(to right, $deleteButtonGradientStartColor 50%, $deleteButtonGradientEndColor 100%);
                     }
+                    &-small {
+                        @extend .c-button--delete;
+                        min-width: 1rem;
+                        margin-left: -2rem;
+                        height: 3.5rem;
+                        line-height: 4rem;
+                    }
+
                 }
                 &--clear {
                     @extend .c-button;

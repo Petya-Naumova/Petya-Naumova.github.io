@@ -118,10 +118,13 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular_2_local_storage__ = __webpack_require__("../../../../angular-2-local-storage/dist/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular_2_local_storage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular_2_local_storage__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__header_header_component__ = __webpack_require__("../../../../../src/app/header/header.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__footer_footer_component__ = __webpack_require__("../../../../../src/app/footer/footer.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ingredients_ingredients_service__ = __webpack_require__("../../../../../src/app/ingredients/ingredients.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__recipes_recipe_service__ = __webpack_require__("../../../../../src/app/recipes/recipe.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ingredients_ingredients_service__ = __webpack_require__("../../../../../src/app/ingredients/ingredients.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_data_storage_service__ = __webpack_require__("../../../../../src/app/shared/data-storage.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__header_header_component__ = __webpack_require__("../../../../../src/app/header/header.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__footer_footer_component__ = __webpack_require__("../../../../../src/app/footer/footer.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -134,8 +137,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-// Components
 
+
+
+
+
+// Components
 
 
 
@@ -148,20 +155,23 @@ AppModule = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* ReactiveFormsModule */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* ReactiveFormsModule */],
             __WEBPACK_IMPORTED_MODULE_3__app_routing_module__["a" /* AppRoutingModule */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* FormsModule */],
+            __WEBPACK_IMPORTED_MODULE_5__angular_http__["b" /* HttpModule */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* ReactiveFormsModule */],
             __WEBPACK_IMPORTED_MODULE_4_angular_2_local_storage__["LocalStorageModule"].withConfig({
                 prefix: 'cooking-app',
                 storageType: 'localStorage'
             })
         ],
         declarations: [
-            __WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */],
-            __WEBPACK_IMPORTED_MODULE_6__header_header_component__["a" /* HeaderComponent */],
-            __WEBPACK_IMPORTED_MODULE_7__footer_footer_component__["a" /* FooterComponent */],
+            __WEBPACK_IMPORTED_MODULE_9__app_component__["a" /* AppComponent */],
+            __WEBPACK_IMPORTED_MODULE_10__header_header_component__["a" /* HeaderComponent */],
+            __WEBPACK_IMPORTED_MODULE_11__footer_footer_component__["a" /* FooterComponent */],
         ],
-        providers: [__WEBPACK_IMPORTED_MODULE_8__ingredients_ingredients_service__["a" /* IngredientsService */]],
-        bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */]]
+        providers: [__WEBPACK_IMPORTED_MODULE_7__ingredients_ingredients_service__["a" /* IngredientsService */], __WEBPACK_IMPORTED_MODULE_6__recipes_recipe_service__["a" /* RecipeService */], __WEBPACK_IMPORTED_MODULE_8__shared_data_storage_service__["a" /* DataStorageService */]],
+        bootstrap: [__WEBPACK_IMPORTED_MODULE_9__app_component__["a" /* AppComponent */]]
     })
 ], AppModule);
 
@@ -289,6 +299,7 @@ HeaderComponent = __decorate([
 var IngredientsService = (function () {
     function IngredientsService() {
         this.ingredientsChanged = new __WEBPACK_IMPORTED_MODULE_0_rxjs_Subject__["Subject"]();
+        this.startedEditing = new __WEBPACK_IMPORTED_MODULE_0_rxjs_Subject__["Subject"]();
         this.ingredients = [
             new __WEBPACK_IMPORTED_MODULE_1__shared_models__["a" /* Ingredient */]('Apples', 5),
             new __WEBPACK_IMPORTED_MODULE_1__shared_models__["a" /* Ingredient */]('Tomatoes', 10)
@@ -296,6 +307,9 @@ var IngredientsService = (function () {
     }
     IngredientsService.prototype.getIngredients = function () {
         return this.ingredients.slice();
+    };
+    IngredientsService.prototype.getIngredient = function (index) {
+        return this.ingredients[index];
     };
     IngredientsService.prototype.addIngredient = function (ingredient) {
         this.ingredients.push(ingredient);
@@ -309,10 +323,144 @@ var IngredientsService = (function () {
         this.ingredientsChanged.next(this.ingredients.slice());
         var _a;
     };
+    IngredientsService.prototype.updateIngredient = function (index, newIngredient) {
+        this.ingredients[index] = newIngredient;
+        this.ingredientsChanged.next(this.ingredients.slice());
+    };
+    IngredientsService.prototype.deleteIngredient = function (index) {
+        this.ingredients.splice(index, 1);
+        this.ingredientsChanged.next(this.ingredients.slice());
+    };
     return IngredientsService;
 }());
 
 //# sourceMappingURL=ingredients.service.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/recipes/recipe.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RecipeService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ingredients_ingredients_service__ = __webpack_require__("../../../../../src/app/ingredients/ingredients.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__ = __webpack_require__("../../../../rxjs/Subject.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var RecipeService = (function () {
+    function RecipeService(http, ingrService) {
+        this.http = http;
+        this.ingrService = ingrService;
+        this.recipeChanged = new __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__["Subject"]();
+        this.recipes = [];
+    }
+    RecipeService.prototype.ngOnInit = function () {
+        var _this = this;
+        this.http.get('https://angular-cooking-app.firebaseio.com/recipes.json')
+            .subscribe(function (response) {
+            var recipes = response.json();
+            for (var _i = 0, recipes_1 = recipes; _i < recipes_1.length; _i++) {
+                var recipe = recipes_1[_i];
+                if (!recipe['ingredients']) {
+                    console.log(recipe);
+                    recipe['ingredients'] = [];
+                }
+            }
+            _this.recipes = recipes;
+            console.log('recipes:', recipes);
+        });
+    };
+    RecipeService.prototype.setRecipes = function (recipes) {
+        this.recipes = recipes;
+        this.recipeChanged.next(this.recipes.slice());
+    };
+    RecipeService.prototype.getRecipes = function () {
+        return this.recipes.slice();
+    };
+    RecipeService.prototype.getRecipeByIndex = function (index) {
+        return this.recipes[index];
+    };
+    RecipeService.prototype.addIngredientsToList = function (ingredients) {
+        this.ingrService.addIngredients(ingredients);
+    };
+    RecipeService.prototype.addRecipe = function (recipe) {
+        this.recipes.push(recipe);
+        this.recipeChanged.next(this.recipes.slice());
+    };
+    RecipeService.prototype.updateRecipe = function (index, newRecipe) {
+        this.recipes[index] = newRecipe;
+        this.recipeChanged.next(this.recipes.slice());
+    };
+    RecipeService.prototype.deleteRecipe = function (index) {
+        this.recipes.splice(index, 1);
+        this.recipeChanged.next(this.recipes.slice());
+    };
+    return RecipeService;
+}());
+RecipeService = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__ingredients_ingredients_service__["a" /* IngredientsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ingredients_ingredients_service__["a" /* IngredientsService */]) === "function" && _b || Object])
+], RecipeService);
+
+var _a, _b;
+//# sourceMappingURL=recipe.service.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/shared/data-storage.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DataStorageService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__recipes_recipe_service__ = __webpack_require__("../../../../../src/app/recipes/recipe.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var DataStorageService = (function () {
+    function DataStorageService(http, recipeService) {
+        this.http = http;
+        this.recipeService = recipeService;
+    }
+    DataStorageService.prototype.storeRecipes = function () {
+        return this.http.put('https://angular-cooking-app.firebaseio.com/recipes.json', this.recipeService.getRecipes());
+    };
+    DataStorageService.prototype.getRecipes = function () {
+        return this.http.get('https://angular-cooking-app.firebaseio.com/recipes.json');
+    };
+    return DataStorageService;
+}());
+DataStorageService = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__recipes_recipe_service__["a" /* RecipeService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__recipes_recipe_service__["a" /* RecipeService */]) === "function" && _b || Object])
+], DataStorageService);
+
+var _a, _b;
+//# sourceMappingURL=data-storage.service.js.map
 
 /***/ }),
 
